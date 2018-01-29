@@ -1,0 +1,91 @@
+#ifndef COVERITEM_H
+#define COVERITEM_H
+
+#include <QWidget>
+#include <QPainter>
+#include <QGraphicsItem>
+#include <QStyleOptionGraphicsItem>
+#include <QColor>
+#include <QBrush>
+#include <QRectF>
+#include <QTimer>
+#include <QMediaPlayer>
+
+class QGraphicsScene;
+class QGraphicsView;
+class QMap;
+
+namespace Ui{
+class MusicCover;
+}
+
+const static int r = 200;//绘制圆的半径
+
+class RotationCover : public QWidget
+{
+    Q_OBJECT
+
+public:
+    RotationCover(QWidget *parent = 0);
+    ~RotationCover();
+
+public slots:
+    void setPixmap(QPixmap map);//设置封面
+    void rotate();//转动
+    void wait(QMediaPlayer::State state);//根据当前媒体状态，设置是否转动
+    void setLrcWidget(QMap <int, QString> lrcMap);
+    void scrollLrc();
+
+private:
+    QGraphicsScene* coverScene;
+    QPixmap map;
+
+    QTimer* timer;
+    qreal angle;
+    bool rotation;
+    
+    Ui::MusicCover* ui;
+};
+
+class CoverItem : public QGraphicsItem
+{
+public:
+    //绘制转动黑圈
+    CoverItem()
+    {
+        gradient = QRadialGradient(r, r, r, r, r);
+        gradient.setColorAt(0 ,QColor(230, 230, 230, 0));
+        gradient.setColorAt(0.595 ,QColor(230, 230, 230, 0));
+        gradient.setColorAt(0.6 ,QColor(15, 15, 15));
+        gradient.setColorAt(0.645 ,QColor(35, 35, 35));
+        gradient.setColorAt(0.65 ,QColor(55, 55, 55));
+        gradient.setColorAt(0.936 ,QColor(40, 40, 40));
+        gradient.setColorAt(0.94 ,QColor(0, 0, 0));
+        gradient.setColorAt(0.964 ,QColor(0, 0, 0));
+        gradient.setColorAt(0.97 ,QColor(230, 230, 230, 150));
+
+        brush = QBrush(gradient);
+    }
+
+    QRectF boundingRect() const
+    {
+        return QRectF(0, 0, 2 * r, 2 * r);
+    }
+
+    virtual void paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget )
+    {
+        Q_UNUSED(option);
+        Q_UNUSED(widget);
+
+        painter->setRenderHint(QPainter::Antialiasing, true);
+        painter->setBrush(brush);
+        painter->setPen(Qt::NoPen);
+        painter->drawEllipse(QPoint(r, r), r, r);
+    }
+
+protected:
+    QBrush brush;
+    QRadialGradient gradient;
+};
+
+#endif // COVERITEM_H

@@ -1,0 +1,60 @@
+#include "rotation_cover.h"
+#include "ui_musiccover.h"
+
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QDebug>
+
+RotationCover::RotationCover(QWidget *parent)
+    :QWidget(parent)
+    ,rotation(false)
+    ,ui(new Ui::MusicCover)
+{
+    ui->setupUi(this);
+    
+    coverScene = new QGraphicsScene(this);
+    ui->coverGraphicsView->setScene(coverScene);
+
+    map = QPixmap(":/images/cover");
+    setPixmap(map);
+
+    timer = new QTimer(30, this);
+}
+
+RotationCover::~RotationCover()
+{
+    delete ui;
+}
+
+void RotationCover::wait(QMediaPlayer::State state)
+{
+    if(state == QMediaPlayer::PlayingState) {
+        connect(timer, &QTimer::timeout, this, &RotationCover::rotate);
+        timer->start();
+    }
+}
+
+void RotationCover::rotate()
+{
+    if(angle > 359.7)
+        angle = 0;
+    ui->coverGraphicsView->rotate(angle);
+    angle += 0.3;
+}
+
+void RotationCover::setPixmap(QPixmap pixmap)
+{
+    if(!pixmap.isNull()) {
+        pixmap = pixmap.scaled(180, 180);
+        delete pixmapItem;
+        pixmapItem = coverScene->addPixmap(pixmap);
+        pixmapItem->moveBy(60, 60);
+        pixmapItem->setTransformOriginPoint(90, 90);
+    
+        CoverItem* item = new CoverItem;
+        coverScene->addItem(item);
+    } else {
+        setPixmap(map);
+    }
+}
+
