@@ -7,7 +7,8 @@
 #include <QImage>
 #include <QDebug>
 
-const static int radius = 25;
+const static int radius = 9; //半径
+const static int count = 9; //模糊次数
 
 class Worker : public QObject
 {
@@ -17,44 +18,52 @@ public slots:
     void blur( QImage &origin)
     {
         QImage newImage = origin;
-
-        int kernel [radius][radius];
-        for (int a = 0; a < radius; a++) {
+        qint64 kernel [radius][radius] = {
+            {1,    6,      720,     3200,    5000,     3200,    720,     6,      1},
+            {6,    1900,   23900,   107000,  176000,   107000,  23900,   1900,   6},
+            {720,  23900,  291000,  3551000, 2153000,  3551000, 291000,  23900,  720},
+            {3200, 107000, 1306000, 5854000, 9653000,  5854000, 1306000, 107000, 700},
+            {5000, 176000, 2153000, 9653000, 15915000, 9653000, 2153000, 176000, 5000},
+            {3200, 107000, 1306000, 5854000, 9653000,  5854000, 1306000, 107000, 700},
+            {720,  23900,  291000,  3551000, 2153000,  3551000, 291000,  23900,  720},
+            {6,    1900,   23900,   107000,  176000,   107000,  23900,   1900,   6},
+            {1,    6,      720,     3200,    5000,     3200,    720,     6,      1}
+        };
+        qint64 sumKernel = 0;
+        for(int a = 0; a < radius; a++) {
             for(int b = 0; b < radius; b++)
-                kernel[a][b] = 1;
+                sumKernel = sumKernel + kernel[a][b];
         }
         int kernelSize = radius;
-        int sumKernel = radius * radius;
-        int r, g, b;
+        qint64 r, g, b;
         QColor color;
 
-        for(int x = kernelSize / 2; x < newImage.width() - (kernelSize / 2); x++){
-            for(int y = kernelSize / 2; y < newImage.height() - (kernelSize / 2); y++){
+        for(int z = 0; z < count; z++) {
+            for(int x = kernelSize / 2; x < newImage.width() - (kernelSize / 2); x++){
+                for(int y = kernelSize / 2; y < newImage.height() - (kernelSize / 2); y++){
 
-                r = 0;
-                g = 0;
-                b = 0;
+                    r = 0;
+                    g = 0;
+                    b = 0;
 
 
-                for(int i = -kernelSize / 2; i <= kernelSize / 2; i++) {
-                    for(int j = -kernelSize / 2; j <= kernelSize / 2; j++ ){
-                     color = QColor(origin.pixel(x + i, y + j));
-                     r += color.red() * kernel[kernelSize / 2 + i][kernelSize / 2 + j];
-                     g += color.green() * kernel[kernelSize / 2 + i][kernelSize / 2 + j];
-                     b += color.blue() * kernel[kernelSize / 2 + i][kernelSize / 2 + j];
+                    for(int i = -kernelSize / 2; i <= kernelSize / 2; i++) {
+                        for(int j = -kernelSize / 2; j <= kernelSize / 2; j++ ){
+                         color = QColor(newImage.pixel(x + i, y + j));
+                         r += color.red() * kernel[kernelSize / 2 + i][kernelSize / 2 + j];
+                         g += color.green() * kernel[kernelSize / 2 + i][kernelSize / 2 + j];
+                         b += color.blue() * kernel[kernelSize / 2 + i][kernelSize / 2 + j];
+                        }
                     }
+                    r = r/sumKernel;
+                    g = g/sumKernel;
+                    b = b/sumKernel;
+
+                    newImage.setPixel(x, y, qRgb(r, g, b));
                 }
-
-                r = qBound(0, r/sumKernel, 255);
-                g = qBound(0, g/sumKernel, 255);
-                b = qBound(0, b/sumKernel, 255);
-
-                newImage.setPixel(x, y, qRgb(r, g, b));
-
             }
         }
-        qDebug() << "call";
-
+        qDebug() << "blur";
         emit resultReady(newImage);
     }
 

@@ -127,6 +127,7 @@ void SearchWidget::search()
         widgets ++;
         widget->resize(this->width() - 80, this->height() - 100);
         widget->move(40, 90);
+        widget->setFocusPolicy(Qt::NoFocus);
         widget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         widget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         widget->setEditTriggers(QAbstractItemView::NoEditTriggers);

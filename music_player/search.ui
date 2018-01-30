@@ -131,6 +131,12 @@
 	background-color: rgb(250, 250, 250);
 }</string>
         </property>
+        <property name="placeholderText">
+         <string>搜索歌曲</string>
+        </property>
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>

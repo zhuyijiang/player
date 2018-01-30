@@ -31,7 +31,6 @@ public:
     ~MusicPlayer();
 
 public slots:
-    void setCoverViaible();
     void jump(const QModelIndex &index);//跳到playlist某个媒体
     void setPlaybackMode();
     void currentIndexChanged(int position);

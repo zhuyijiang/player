@@ -22,6 +22,11 @@ MusicCover::MusicCover(QWidget *parent)
 {
     ui->setupUi(this);
 
+    controller = new Controller();
+
+    qRegisterMetaType<QImage>("QImage&");
+    connect(controller, &Controller::handleResults, this, &MusicCover::setBackground);
+
     QPalette palete;
     palete.setColor(QPalette::Background, QColor(245, 245, 245));
     ui->coverWidget->setAutoFillBackground(true);
@@ -88,16 +93,10 @@ void MusicCover::rotate()
 
 void MusicCover::setCover(QPixmap map)
 {
+    qDebug() << "setCover";
     disconnect(timer, &QTimer::timeout, this, &MusicCover::rotate);
-    coverScene->clear();
-
-    coverOutItem = new CoverOutItem;
-    coverScene->addItem(coverOutItem);
-    coverOutItem->setTransformOriginPoint(200, 200);
-
-    foreground = new Foreground;
-    coverScene->addItem(foreground);
-    foreground->setTransformOriginPoint(200, 200);
+    coverScene->removeItem(pixmapitem);
+    coverScene->removeItem(coverInItem);
 
     map = PixmapToRound(map, 126);
     pixmapitem = coverScene->addPixmap(map);
@@ -112,8 +111,10 @@ void MusicCover::setCover(QPixmap map)
 
 void MusicCover::setLrcWidget(QList <int> time_list, QStringList lrc_list)
 {
+    qDebug() << "scrollLrc";
     ui->lrcListWidget->clear();
     if(lrc_list.isEmpty()) {
+        timeList = time_list;
         ui->lrcListWidget->addItem("暂无歌词");
     } else {
         timeList = time_list;
@@ -127,10 +128,10 @@ void MusicCover::scrollLrc(qint64 time)
     int row = timeList.indexOf(t);
     if(row != -1) {
         if(row == 0){
-            ui->lrcListWidget->verticalScrollBar()->setValue(row - 7);
+            ui->lrcListWidget->verticalScrollBar()->setValue(row - 6);
             ui->lrcListWidget->item(row)->setTextColor(QColor(255, 255, 255));
         } else {
-            ui->lrcListWidget->verticalScrollBar()->setValue(row - 7);
+            ui->lrcListWidget->verticalScrollBar()->setValue(row - 6);
             ui->lrcListWidget->item(row)->setTextColor(QColor(255, 255, 255));
             ui->lrcListWidget->item(row - 1)->setTextColor(QColor(0, 0, 0));
         }
@@ -172,24 +173,30 @@ QPixmap PixmapToRound(QPixmap &src, int radius)
 
 void MusicCover::setBackground(QImage &image)
 {
-    qDebug() << "call";
-
+    qDebug() << "setBackground";
     image = image.copy(radius, radius, image.width() - (2 * radius), image.height() - (2 * radius));
-    QPalette palette;
+    QPalette palette = ui->coverWidget->palette();
     if(ui->coverWidget->width() > ui->coverWidget->height())
         palette.setBrush(QPalette::Window, QBrush(image.scaled(ui->coverWidget->size(), Qt::KeepAspectRatioByExpanding)));
     else
         palette.setBrush(QPalette::Window, QBrush(image.scaled(ui->coverWidget->size(), Qt::KeepAspectRatio)));
     ui->coverWidget->setPalette(palette);
-    sender()->deleteLater();
 }
 
 void MusicCover::blur(QPixmap cover)
 {
     QImage image = cover.toImage();
-    Controller* controller = new Controller;
-    qRegisterMetaType<QImage>("QImage&");
-    connect(controller, &Controller::handleResults, this, &MusicCover::setBackground, Qt::QueuedConnection);
     controller->operate(image);
 }
 
+void MusicCover::setCoverViaible()
+{
+    if(this->isVisible()) {
+        this->hide();
+        emit coverVisible(false);
+    }
+    else {
+        this->show();
+        emit coverVisible(true);
+    }
+}

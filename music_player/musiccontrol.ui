@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1000</width>
-    <height>80</height>
+    <height>226</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>80</height>
+     <height>81</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -62,7 +62,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QPushButton" name="coverButton">
+      <widget class="QWidget" name="coverWidget" native="true">
        <property name="minimumSize">
         <size>
          <width>80</width>
@@ -75,20 +75,55 @@
          <height>80</height>
         </size>
        </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
        <property name="styleSheet">
-        <string notr="true">QPushButton#coverButton{
-border-style: outset;
+        <string notr="true"/>
+       </property>
+       <widget class="QPushButton" name="coverButton">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>80</width>
+          <height>80</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton#coverButton:hover{
+	image: url(:/icon/scaled.png);	
+	background-color: rgba(50, 50, 50, 100);
+}
+QPushButton#coverButton{
+	border-style:solid;
 }</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>80</width>
-         <height>80</height>
-        </size>
-       </property>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>80</width>
+          <height>80</height>
+         </size>
+        </property>
+       </widget>
       </widget>
      </item>
      <item>

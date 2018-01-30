@@ -10,7 +10,10 @@ MusicControl::MusicControl(QWidget *parent)
     ,ui(new Ui::MusicControl)
 {
     ui->setupUi(this);
-    ui->coverButton->setIcon(QIcon(":/images/cover.jpg"));
+
+    QPalette pal;
+    pal.setBrush(QPalette::Window, QBrush(QImage(":/images/cover").scaled(ui->coverWidget->size())));
+    ui->coverWidget->setPalette(pal);
 
     api = new QQMusicAPI(this);
     connect(api, &QQMusicAPI::signalCover, this, &MusicControl::setMusicCover);
@@ -105,5 +108,17 @@ void MusicControl::sliderMove(int time)
 
 void MusicControl::setMusicCover(QPixmap cover)
 {
-    ui->coverButton->setIcon(QIcon(cover.scaled(80, 80)));
+    QPalette pal;
+    pal.setBrush(QPalette::Window, QBrush(cover.scaled(ui->coverWidget->size())));
+    ui->coverWidget->setPalette(pal);
+}
+
+void MusicControl::setCoverButton(bool viaible)
+{
+    if(viaible)
+        ui->coverButton->setStyleSheet(tr("QPushButton#coverButton{ border-style:solid;}"
+                                          "QPushButton#coverButton:hover{image: url(:/icon/scaled.png);background-color: rgba(50, 50, 50, 100);}"));
+    else
+        ui->coverButton->setStyleSheet(tr("QPushButton#coverButton{ border-style:solid;}"
+                                          "QPushButton#coverButton:hover{image: url(:/icon/unfold.png);background-color: rgba(50, 50, 50, 100);}"));
 }

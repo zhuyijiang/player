@@ -182,13 +182,10 @@ void QQMusicAPI::getHotWordFinished()
 
 void QQMusicAPI::getLrc(const QString &lrcUrl)
 {
-    qDebug() << lrcUrl;
-
     QUrl url = QUrl(lrcUrl);
     QNetworkRequest request(url);
     QNetworkReply* reply = http->get(request);
-    //error: no matching function for call to 'QNetworkAccessManager::get(QNetworkRequest (&)(QUrl))'
-    //解决办法：将url先申明，再将其用于QNetworkRequest的构造函数。其中原因应该是编译器出bug了吧
+
     connect(reply, &QNetworkReply::finished, this, [=](){
         QList <int> timeList;
         QStringList lrcList;
@@ -216,6 +213,7 @@ void QQMusicAPI::getLrc(const QString &lrcUrl)
             }
             emit signalLrc(timeList, lrcList);
             reply->deleteLater();
+            qDebug() << "lrc_ture";
         } else {
             emit signalLrc(timeList, lrcList);
             qDebug() << "lrc_error";
@@ -237,15 +235,15 @@ void QQMusicAPI::getCover(const QString &coverUrl)
             //error: passing 'const QPixmap' as 'this' argument discards qualifiers [-fpermissive]
             //相同解决办法，将pixmap申明到此处即解决
             if(pixmap.loadFromData(bytes)) {
-                qDebug() << "ture";
+                qDebug() << "load_cover_ture";
                 emit signalCover(pixmap);
             } else {
-                qDebug() << "fales";
+                qDebug() << "load_cover_fales";
                 emit signalCover(QPixmap(":/images/cover.jpg"));
             }
             reply->deleteLater();
         } else {
-            qDebug() << "error";
+            qDebug() << "cover_error";
             emit signalCover(QPixmap(":/images/cover.jpg"));
             reply->deleteLater();
         }

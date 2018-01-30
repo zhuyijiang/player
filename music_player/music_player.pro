@@ -49,7 +49,8 @@ FORMS += \
     titlebar.ui \
     search.ui \
     musiccover.ui \
-    musiccontrol.ui
+    musiccontrol.ui \
+    my_music.ui
 
 RESOURCES += \
     rec.qrc

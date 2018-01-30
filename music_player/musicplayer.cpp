@@ -61,7 +61,9 @@ MusicPlayer::MusicPlayer(QWidget *parent) :
     connect(musicControl, &MusicControl::orderChange, this, &MusicPlayer::setPlaybackMode);
     connect(musicControl, &MusicControl::volumeValue, player, &QMediaPlayer::setVolume);
     connect(musicControl, &MusicControl::sliderValue, player, &QMediaPlayer::setPosition);
-    connect(musicControl, &MusicControl::visible, this, &MusicPlayer::setCoverViaible);
+    connect(musicControl, &MusicControl::visible, musicCover, &MusicCover::setCoverViaible);
+
+    connect(musicCover, &MusicCover::coverVisible, musicControl, &MusicControl::setCoverButton);
 
     ui->playlistWidget->setSpacing(2);
     ui->playlistWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);//取消滚动条
@@ -147,17 +149,9 @@ void MusicPlayer::playClicked()
 void MusicPlayer::currentIndexChanged(int position)
 {
     musicControl->setData(dataList.at(position));
-    musicCover->setData(dataList.at(position));
+    musicCover->setData(dataList.at(position)); 
 }
 
-void MusicPlayer::setCoverViaible()
-{
-    if(musicCover->isVisible()) {
-        musicCover->hide();
-    }
-    else {
-        musicCover->show();
-    }
-}
+
 
 

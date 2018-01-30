@@ -65,6 +65,9 @@
       <height>560</height>
      </size>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
     <property name="styleSheet">
      <string notr="true">QListWidget{
 	
@@ -72,21 +75,33 @@
     border-style: solid;
     border-right: 1px solid rgb(216, 216, 216);
 	show-decoration-selected: 1;
-	alternate-background-color: yellow;
 	background-color: rgb(245, 245, 245);
 		
-	font: 10pt &quot;Microsoft YaHei UI&quot;;
+	font: 11pt &quot;Microsoft YaHei UI&quot;;
 }
 
 QListWidget::item:selected {
-    
 	background-color: rgb(200, 200, 200);
+	border-width: 0px;
 }
 
 QListWidget::item:hover {
     
-	background-color: rgb(200, 200, 200);
-}</string>
+	background-color: rgb(230, 230, 230);
+}
+</string>
+    </property>
+    <property name="alternatingRowColors">
+     <bool>true</bool>
+    </property>
+    <property name="selectionBehavior">
+     <enum>QAbstractItemView::SelectRows</enum>
+    </property>
+    <property name="gridSize">
+     <size>
+      <width>0</width>
+      <height>30</height>
+     </size>
     </property>
    </widget>
   </widget>

@@ -1,28 +1,30 @@
 <RCC>
     <qresource prefix="/icon">
+        <file>close.png</file>
+        <file>collect.png</file>
         <file>cycle.png</file>
         <file>delete.png</file>
+        <file>delete_2.png</file>
+        <file>delete_3.png</file>
         <file>good.png</file>
+        <file>max.png</file>
+        <file>min.png</file>
+        <file>music.png</file>
         <file>next.png</file>
         <file>open.png</file>
         <file>order.png</file>
         <file>pause.png</file>
         <file>play.png</file>
         <file>random.png</file>
+        <file>scal.png</file>
+        <file>search.png</file>
+        <file>search_2.png</file>
+        <file>song.png</file>
         <file>stop.png</file>
         <file>users.png</file>
         <file>volume.png</file>
-        <file>collect.png</file>
-        <file>max.png</file>
-        <file>music.png</file>
-        <file>scal.png</file>
-        <file>search.png</file>
-        <file>song.png</file>
-        <file>close.png</file>
-        <file>min.png</file>
-        <file>search_2.png</file>
-        <file>delete_2.png</file>
-        <file>delete_3.png</file>
+        <file>scaled.png</file>
+        <file>unfold.png</file>
     </qresource>
     <qresource prefix="/images">
         <file>cover.jpg</file>

@@ -32,6 +32,7 @@ public slots:
     void setOrder(QMediaPlaylist::PlaybackMode mode);
     void sliderMove(int time);
     void setMusicCover(QPixmap cover);
+    void setCoverButton(bool viaible);
 
 signals:
     void next();

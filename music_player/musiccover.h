@@ -17,7 +17,7 @@
 
 class QGraphicsScene;
 class QQMusicAPI;
-
+class Controller;
 
 namespace Ui{
 class MusicCover;
@@ -159,9 +159,10 @@ public slots:
     void setData(MusicData data);
     void setBackground(QImage &image);
     void blur(QPixmap cover);
+    void setCoverViaible();
 
 signals:
-    void thisVisible(bool visible);
+    void coverVisible(bool visible);
 
 private:
     QGraphicsScene* coverScene;
@@ -179,6 +180,8 @@ private:
     qreal angle;
     MusicData coverData;
     Ui::MusicCover* ui;
+
+    Controller* controller;
 };
 
 #endif // COVERITEM_H

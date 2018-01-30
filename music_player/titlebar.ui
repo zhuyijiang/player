@@ -135,8 +135,9 @@
 }
 
 QPushButton#minButton:pressed {
-    background-color: rgb(200, 200, 200);
-    border-style: inset;
+    
+	background-color: rgb(96, 255, 79);
+    
 }
 
 QPushButton#minButton:hover {
